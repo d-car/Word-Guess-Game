@@ -1,30 +1,33 @@
 // VARIABLES
 // ==========================================================================
-    
-var wordBank = ["guitar", "drums", "cello", "violin", "trumpet", "tuba", "trombone"];
-var choice = Math.floor(Math.random() * 8); //picks random number between 0-7
-var answer = wordBank[choice]; //variable S
-var aLength = answer.length;
-var display = [aLength];
-var win = aLength;
-var letters = answer.split(''); //this takes an index from wordBank array and creates an array of that index made up of the letters 
-var triesRemaining = 10;
-var output = "";
-var userLetter = "";
 
+var wordBank = ["guitar", "drums", "cello", "violin", "trumpet", "tuba", "trombone"];
+var compChoice = Math.floor(Math.random() * wordBank.length);
+var solution = wordBank[compChoice]; //This picks a random solution by choosing the string in the wordBank array that is equal to the index of what compChoice determines.  Did I get around making a loop by using this variable?
+var userAttempts = 10; //user attempts left
+var userInstructions = document.getElementById("instructions");
+var blankSolution = document.getElementById("blankSolution");
+var blankSpace = ""; //used for blank word display
+var solutionLength = solution.length; //used for blank word display
+var blankWord = [solutionLength]; //used for blank word display
 
 // FUNCTIONS
 // ==========================================================================
+console.log(solution)
 
-var setup = function()
-{
+document.onkeyup = function(event) {
+    userInstructions.textContent = "You Have 10 Tries to Guess the Word!";
+};
 
-    for (var i=0; i < answer.length; i++)
-    {
-        display[i] = "_ ";
-        output = output + display[i];
+window.onload = function() {
+    for (var i=0; i < solution.length; i++) {
+        blankWord[i] = "_ ";
+        blankSpace = blankSpace + blankWord[i];
     }
-    document.getElementById("blankWord").innerHTML = output;
-    output ="";
 
+    blankSolution.innerHTML = blankSpace; 
 }
+
+
+
+
