@@ -1,93 +1,140 @@
-// VARIABLES
-// ==========================================================================
+//variable
+var wordBank = ["guitar", "drums", "triangle", "violin", "trumpet", "tuba", "trombone"];
+var solution = wordBank[Math.floor(Math.random()* wordBank.length)];
+var solutionArray = [];
+var wrongLet = [];
+var correctLet = [];
+var blankWord = [];
+var valid;
+var wins = 0;
+var losses = 0;
+var guessLeft = 10;
+// var letterGuessed;
 
-var wordBank = ["guitar", "drums", "cello", "violin", "trumpet", "tuba", "trombone"];
-var solution = wordBank[Math.floor(Math.random() * wordBank.length)];
-var solutionLength = solution.length; //used for blank word display
-var bSolArray = [];//used in checking guessed letters
-var wrongGuess = [];
-var rightGuess = [];
-var rightLet = [];
-var displayWord = [];
-var displayWordArray = solution.split(""); //splits selected solution into array
-var userAttempts = 10; //user attempts left
-var userInstructions = document.getElementById("instructions");
-var blankSolution = document.getElementById("blankSolution");
-var blankSpace = ""; //used for blank word display
-var solutionLength = solution.length; //used for blank word display
-var blankWord = [solutionLength]; //used for blank word display
-var guessesLeft = 10;
+//functions
 
-
-// FUNCTIONS
-// ==========================================================================
-console.log(solution)
-
-
-// document.onkeyup = function(event) {
-//     userInstructions.textContent = "You Have 10 Tries to Guess the Word!"
-// }
-
-// window.onload = function() {
-
-//     for (var i=0; i < solution.length; i++) {
-//         blankWord[i] = "_ ";
-//         blankSpace = blankSpace + blankWord[i];
-//     }
-
-//     blankSolution.innerHTML = blankSpace; 
-//     blankSpace = "";
-// }
-
-function begin()
+//selects a word from word bank and displays all info on gamescreen
+function startGame()
 {
-	targetWordArray = solution.split("");
-	//transforms word to an array of dashes
+	//Grab random index from wordBank array
+	solution = wordBank[Math.floor(Math.random()* wordBank.length)];
+    //split chosen index into array
+    solutionArray = solution.split("");
+	
 	for(i=0; i<solution.length; i++)
 	{
-		displayWord.push(" _ ");
+		blankWord.push(" _ "); //push "_" to the indexes of array
 	}
 
-	document.getElementById("userGuesses").innerHTML = displayWord.join("");
-	document.getElementById("instructions").innerHTML = "press any key to guess a letter";
-	document.getElementById("wins").innerHTML = "Wins: " + wins;
-	document.getElementById("losses").innerHTML = "Losses: " + losses;
-	document.getElementById("userGuesses").innerHTML = "Guesses Remaing: " + guessesLeft;
-	document.getElementById("guessBox").innerHTML = "Letters Guessed: " + wrongGuess;
+	    document.getElementById("arrayBox").innerHTML = blankWord.join("");
+        document.getElementById("instructions").innerHTML = "Press Key to Guess Letter";
+        document.getElementById("wins").innerHTML = "Wins: " + wins;
+        document.getElementById("losses").innerHTML = "Losses: " + losses;
+        document.getElementById("guessesLeft").innerHTML = "Guesses Left: " + guessLeft;
+        document.getElementById("guessBox").innerHTML = "Guesses:"  + wrongLet;
 }
 
-function checkLetter(letter) {
-    var letInWord
-    for (j = 0; j < displayWordArray.length; j++) {
+//this function is to check to see if the guessed letter in in the solution
 
-        if(letter == displayWordArray[i])
-        {
-            letInWord = true;
-            replaceLetter(letter);
-			rightGuess.push(letter);
-        }
-        else {
-            letInWord = false;
-        }
-    }
-	if(letInWord === false)
+function checkLetter(letter)
+{
+	var inSolution;
+	for (i = 0; i < solutionArray.length; i++)
 	{
-		wrongGuess.push(letter);
-		guessesLeft = guessesLeft - 1;
+		if (letter == solutionArray[i])
+		{
+			inSolution = true;
+			replaceLetter(letter);
+			correctLet.push(letter);
+		}
+		else
+		{
+			inSolution = false;
+		}
+	}
+	if (inSolution === false)
+	{
+		wrongLet.push(letter);
+		guessLeft = guessLeft - 1; 
 	}
 	else
 	{	
 	}
-	document.getElementById("guessBox").innerHTML = displayWord.join("");
+	document.getElementById("arrayBox").innerHTML = blankWord.join("");
 }
 
+//function to reset variables to their original value
+function reset()
+{
+	solution = "";
+	solutionArray = [];
+	wrongLet = [];
+	correctLet = [];
+	blankWord = [];
+	guessLeft = 10;
+
+}
+
+//function to replace the blank spaces in solution to correct letter
 function replaceLetter(letter)
 {
-	var j = displayWordArray.indexOf(letter);
-	displayWord.splice(j, 1, letter);
+	var j = solutionArray.indexOf(letter);
+	blankWord.splice(j, 1, letter);
 }
-    
 
+//function to check to see if the user has won the game.  If user wins, win variable increases and the  reset and start funtions are called again
+function checkForWin()
+{
+	if (correctLet.length == solutionArray.length)
+	{
+		wins = wins + 1; //tried to use ++ here but for some reason I couldn't get that to work
+        document.getElementById("wins").innerHTML = "Wins: " + wins;
+        alert("You Win!");
+		reset();
+		startGame();
+	}
+}
+
+//allows only characters AND only characters that have not yet been guessed
+function validateKey(keystroke)
+{
+	if (correctLet.includes(letterGuessed) || wrongLet.includes(letterGuessed))
+	{
+		valid = false;
+	}
+	else
+	{
+		valid = true;
+	}
+}
+
+
+//This calls the funtions to start and run the game
+startGame();
+
+document.onkeyup = function(event)
+{
+	letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+	validateKey();
+	if (valid == true)
+	{
+	checkLetter(letterGuessed);
+	document.getElementById("guessesLeft").innerHTML = "Guesses Left: " + guessLeft;
+	document.getElementById("guessBox").innerHTML = "Guesses: " + wrongLet;
+
+	checkForWin();
+
+	if (guessLeft == 0)
+	{
+        alert("You Lose!")
+        losses = losses + 1;
+		reset();
+		startGame();
+		document.getElementById("losses").innerHTML = "Losses: " + losses;
+	}
+	}
+}
+console.log(solution);
 
 
 
