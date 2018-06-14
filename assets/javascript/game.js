@@ -17,7 +17,7 @@ var guessLeft = 10;
 //==========================================================================================================================================
 
 //selects a word from word bank and displays all info on gamescreen
-function startGame()
+function runGame()
 {
 	//Grab random index from wordBank array
 	solution = wordBank[Math.floor(Math.random()* wordBank.length)];
@@ -46,9 +46,9 @@ function checkLetter(letter)
 	{
 		if (letter == solutionArray[i])
 		{
-			inSolution = true;
+			inSolution = true;  
 			replaceLetter(letter);
-			correctLet.push(letter);
+			correctLet.push(letter); //Something around here is wrong I think.  Solutions with multiples of letters (cello) only show 1 letter filling in.  It registers all multiples as correct just only displays one
 		}
 		else
 		{
@@ -94,11 +94,12 @@ function checkForWin()
         document.getElementById("wins").innerHTML = "Wins: " + wins;
         alert("You Win!");
 		reset();
-		startGame();
+		runGame();
 	}
 }
 
-//allows only characters AND only characters that have not yet been guessed
+//This function is a check to make sure the user input has not already been guessed.
+
 function validateKey(keystroke)
 {
     if (correctLet.includes(letterGuessed) || wrongLet.includes(letterGuessed))
@@ -113,7 +114,7 @@ function validateKey(keystroke)
 
 
 //This calls the funtions to start and run the game
-startGame();
+runGame();
 
 document.onkeyup = function(event)
 {
@@ -132,12 +133,12 @@ document.onkeyup = function(event)
         alert("You Lose!")
         losses = losses + 1;
 		reset();
-		startGame();
+		runGame();
 		document.getElementById("losses").innerHTML = "Losses: " + losses;
 	}
 	}
 }
-//console.log(solution);
+
 
 
 
