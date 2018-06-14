@@ -1,17 +1,20 @@
-//variable
-var wordBank = ["guitar", "drums", "triangle", "violin", "trumpet", "tuba", "trombone"];
+//VARIABLES
+//==========================================================================================================================================
+var wordBank = ["guitar", "drums", "triangle", "piano", "clarinet", "tuba", "harp"];
 var solution = wordBank[Math.floor(Math.random()* wordBank.length)];
 var solutionArray = [];
-var wrongLet = [];
-var correctLet = [];
 var blankWord = [];
+var correctLet = [];
+var wrongLet = [];
 var valid;
 var wins = 0;
 var losses = 0;
 var guessLeft = 10;
-// var letterGuessed;
 
-//functions
+
+
+//FUNCTIONS
+//==========================================================================================================================================
 
 //selects a word from word bank and displays all info on gamescreen
 function startGame()
@@ -20,8 +23,8 @@ function startGame()
 	solution = wordBank[Math.floor(Math.random()* wordBank.length)];
     //split chosen index into array
     solutionArray = solution.split("");
-	
-	for(i=0; i<solution.length; i++)
+	//create for loop to loop through new split array and use the push method to place "_" at each index
+	for(i = 0; i < solution.length; i++)
 	{
 		blankWord.push(" _ "); //push "_" to the indexes of array
 	}
@@ -82,7 +85,7 @@ function replaceLetter(letter)
 	blankWord.splice(j, 1, letter);
 }
 
-//function to check to see if the user has won the game.  If user wins, win variable increases and the  reset and start funtions are called again
+//function to check to see if the user has won the game.  If user wins, win variable increases and the alert pops and pauses the code until you clikck ok, then reset and start funtions are called again
 function checkForWin()
 {
 	if (correctLet.length == solutionArray.length)
@@ -98,7 +101,7 @@ function checkForWin()
 //allows only characters AND only characters that have not yet been guessed
 function validateKey(keystroke)
 {
-	if (correctLet.includes(letterGuessed) || wrongLet.includes(letterGuessed))
+    if (correctLet.includes(letterGuessed) || wrongLet.includes(letterGuessed))
 	{
 		valid = false;
 	}
@@ -134,7 +137,7 @@ document.onkeyup = function(event)
 	}
 	}
 }
-console.log(solution);
+//console.log(solution);
 
 
 
